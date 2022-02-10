@@ -33,5 +33,5 @@ const createSchema = new schema({
         required: true,
     }
 });
-const adminModel = mongoose.model('Admin',createSchema);
-module.exports = adminModel;
+const TransporterModel = mongoose.model('Transporter',createSchema);
+module.exports = TransporterModel;

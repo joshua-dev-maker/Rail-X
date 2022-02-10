@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const  adminRouter = require('./src/routes/transportation.route')
+const  TransporterRouter = require('./src/routes/transportation.route')
 require("dotenv").config();
 
 
@@ -28,7 +28,7 @@ const connectDB = async ()=> {
 connectDB();
 
 
-app.use("/api/v1", adminRouter);
+app.use("/api/v1", TransporterRouter);
 
 app.listen (PORT, ()=> {
    console.log(`Listening on port ${PORT}`);

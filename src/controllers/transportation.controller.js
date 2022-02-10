@@ -1,10 +1,11 @@
-const admin = require('../Models/transportation.model')
+const Transporter = require('../Models/transportation.model')
 
-exports.createAdmins = async(req, res,next) => {
+//registration of Transporters
+exports.addTransporter = async(req, res,next) => {
     try {
         const {firstName, lastName,destination,age,nextOfKin,phoneNumber}= req.body;
 
-        const newAdmin = new admin({
+        const newTransporter = new Transporter({
               firstName,
               lastName,
               destination,
@@ -12,23 +13,24 @@ exports.createAdmins = async(req, res,next) => {
               nextOfKin,
               phoneNumber
         });
-        await newAdmin.save();
+        await newTransporter.save();
         return res.status(201).json({
             success: true,
-            newAdmin,
+            newTransporter,
         })
     }
      catch (error) {
         return res.status(500).json({
             success: false,
-            message: "error",
+            message: "Input correct details",
         });
         
     }
 }
 
+// taking into account total number of Transporters
 
-exports.countAdmin = async (req,res,next)=>{
+exports.countTransporter = async (req,res,next)=>{
     try {
         // const query = admin.find();
         // await query.count(function (err, count) {
@@ -37,27 +39,33 @@ exports.countAdmin = async (req,res,next)=>{
         //         return count
                 
         // }, next());
-        const adminCount = await admin.countDocuments()
+        const countTransporter = await Transporter.countDocuments()
 
         // await count
         return res.status(201).json({
             success: true,
-            adminCount
+            countTransporter
         })
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
+        return res.status(500).json({
+          success: false,
+          message:"numbers not accurate"
+        })
+
     }
 }
+// editing Transporters information
 
-exports.updateAdmins = async (req, res, next) => {
+exports.updateTransporter = async (req, res, next) => {
     try {
         const {_id} = req.params;
-        const updateAdmin = await admin.findOneAndUpdate({ _id: _id }, req.body, {
+        const updateTransporter = await Transporter.findOneAndUpdate({ _id: _id }, req.body, {
             new: true,
         })
         return res.status(200).json({
             success: true,
-            updateAdmin,
+            updateTransporter,
           });
         } catch (error) {
           console.log(error);
@@ -69,20 +77,21 @@ exports.updateAdmins = async (req, res, next) => {
       };
 
 
-
-      exports.removeAdmins = async (req, res, next) => {
+      // deleting transporters information
+      exports.removeTransporter = async (req, res, next) => {
         try {
             const {_id} = req.params;
-            const removeAdmins = await admin.findOneAndDelete({ _id: _id })
+            const removeTransporter = await Transporter.findOneAndDelete({ _id: _id })
             return res.status(200).json({
                 success: true,
-                message: `The user with id ${_id} has been removed`
+                message: `The user with id ${_id} has been removed`,
+                removeTransporter,
               });
             } catch (error) {
               console.log(error);
               return res.status(500).json({
                 success: false,
-                message: "Server Error",
+                message: "Unable to delete the user",
               });
             }
           };
