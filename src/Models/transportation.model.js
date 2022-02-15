@@ -1,9 +1,9 @@
 const mongoose= require('mongoose');
 
-const schema = mongoose.Schema
+const Transporter = mongoose.Schema
 
 
-const createSchema = new schema({
+const TransporterSchema = new Transporter({
 
     firstName: {
         type: String,
@@ -33,5 +33,5 @@ const createSchema = new schema({
         required: true,
     }
 });
-const TransporterModel = mongoose.model('Transporter',createSchema);
+const TransporterModel = mongoose.model('Transporter',TransporterSchema);
 module.exports = TransporterModel;

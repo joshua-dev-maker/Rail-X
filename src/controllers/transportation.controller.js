@@ -5,15 +5,16 @@ exports.addTransporter = async(req, res,next) => {
     try {
         const {firstName, lastName,destination,age,nextOfKin,phoneNumber}= req.body;
 
-        const newTransporter = new Transporter({
-              firstName,
-              lastName,
-              destination,
-              age,
-              nextOfKin,
-              phoneNumber
-        });
-        await newTransporter.save();
+        // const newTransporter = new Transporter({
+        //       firstName,
+        //       lastName,
+        //       destination,
+        //       age,
+        //       nextOfKin,
+        //       phoneNumber
+        // });
+        // await newTransporter.save();
+        await Transporter.create(firstName, lastName,destination,age,nextOfKin,phoneNumber)
         return res.status(201).json({
             success: true,
             newTransporter,
@@ -22,7 +23,7 @@ exports.addTransporter = async(req, res,next) => {
      catch (error) {
         return res.status(500).json({
             success: false,
-            message: "Input correct details",
+            message: error.message,
         });
         
     }
@@ -32,25 +33,21 @@ exports.addTransporter = async(req, res,next) => {
 
 exports.countTransporter = async (req,res,next)=>{
     try {
-        // const query = admin.find();
-        // await query.count(function (err, count) {
-        //     if (err) console.log(err)
-        //     else {console.log("Count is " + count) }
-        //         return count
-                
-        // }, next());
         const countTransporter = await Transporter.countDocuments()
+        if(!countTransporter) 
+        throw error
 
         // await count
-        return res.status(201).json({
+        return res.status(200).json({
             success: true,
             countTransporter
         })
-    } catch (error) {
+    } 
+    catch (error) {
         console.log(error);
         return res.status(500).json({
           success: false,
-          message:"numbers not accurate"
+          message:error.message
         })
 
     }
@@ -59,9 +56,9 @@ exports.countTransporter = async (req,res,next)=>{
 
 exports.updateTransporter = async (req, res, next) => {
     try {
-        const {_id} = req.params;
-        const updateTransporter = await Transporter.findOneAndUpdate({ _id: _id }, req.body, {
-            new: true,
+        const {_id} = req.query;
+        const updateTransporter = await Transporter.findOneAndUpdate({ _id}, req.body, {
+            new: true
         })
         return res.status(200).json({
             success: true,
@@ -71,7 +68,7 @@ exports.updateTransporter = async (req, res, next) => {
           console.log(error);
           return res.status(500).json({
             success: false,
-            message: "Server Error",
+            message: error.message,
           });
         }
       };
@@ -81,17 +78,17 @@ exports.updateTransporter = async (req, res, next) => {
       exports.removeTransporter = async (req, res, next) => {
         try {
             const {_id} = req.params;
-            const removeTransporter = await Transporter.findOneAndDelete({ _id: _id })
+            const removeTransporter = await Transporter.findOneAndDelete({ _id})
             return res.status(200).json({
                 success: true,
-                message: `The user with id ${_id} has been removed`,
-                removeTransporter,
+                message: `The transporter has been removed`,
+                // removeTransporter,
               });
             } catch (error) {
               console.log(error);
               return res.status(500).json({
                 success: false,
-                message: "Unable to delete the user",
+                message: error.message,
               });
             }
           };
